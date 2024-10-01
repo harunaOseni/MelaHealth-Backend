@@ -6,12 +6,13 @@ const symptomCheckerRoute = require('./routes/symptomChecker');
 
 const app = express();
 const PORT = process.env.PORT || 8000;
+const BASE_URL = process.env.NODE_ENV === 'production' ? process.env.PROD_BASE_URL : process.env.DEV_BASE_URL;
 
-// Middleware
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? process.env.PROD_BASE_URL 
-    : process.env.DEV_BASE_URL
+  origin: '*',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 app.use(express.json());
 
@@ -25,6 +26,5 @@ app.use('/api/symptom-checker', symptomCheckerRoute);
 // Start Server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV}`);
-  console.log(`CORS origin: ${process.env.NODE_ENV === 'production' ? process.env.PROD_BASE_URL : process.env.DEV_BASE_URL}`);
+  console.log(`Base URL: ${BASE_URL}`);
 });
